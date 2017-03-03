@@ -9,3 +9,7 @@ type Rectangle struct {
 func (tis *Rectangle) perimeter() int {
 	return (tis.number_one + tis.number_two) * 2
 }
+
+func (tis *Rectangle) area() int {
+	return tis.number_one * tis.number_two
+}

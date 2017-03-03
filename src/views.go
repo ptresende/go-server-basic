@@ -4,7 +4,14 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 )
+
+func counter() {
+	for i := 0; i < 10; i++ {
+		fmt.Printf("Counting: %d!\n", i)
+	}
+}
 
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -12,19 +19,31 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func perimeter(w http.ResponseWriter, rect Rectangle) {
+func perimeter(w http.ResponseWriter, r *http.Request) {
+	go counter()
+	length, _ := strconv.Atoi(r.URL.Query().Get("length"))
+	width, _ := strconv.Atoi(r.URL.Query().Get("width"))
+	rect := Rectangle{length, width}
 	res := rect.perimeter()
-	fmt.Fprintf(w, "Here is the perimeter: %d", res)
+	fmt.Fprintf(w, "Here is the perimeter: %d\n", res)
+	fmt.Printf("Here is the perimeter: %d\n", res)
 }
 
+func area(w http.ResponseWriter, r *http.Request) {
+	length, _ := strconv.Atoi(r.URL.Query().Get("length"))
+	width, _ := strconv.Atoi(r.URL.Query().Get("width"))
+	rect := Rectangle{length, width}
+	res := rect.area()
+	fmt.Fprintf(w, "Here is the area: %d\n", res)
+	fmt.Printf("Here is the area: %d\n", res)
+}
 
 func main() {
-	rect := Rectangle{1, 2}
-
     	http.HandleFunc("/", handler)
 	http.HandleFunc("/perimeter", func(w http.ResponseWriter, r *http.Request) {
-		perimeter(w, rect)
+		perimeter(w, r)
+		area(w, r)
 	})
 
-    	http.ListenAndServe(":8081", nil)
+    	http.ListenAndServe(":8080", nil)
 }
