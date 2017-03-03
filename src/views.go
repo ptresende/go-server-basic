@@ -12,7 +12,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func perimeter(w http.ResponseWriter, r *http.Request, rect Rectangle) {
+func perimeter(w http.ResponseWriter, rect Rectangle) {
 	res := rect.perimeter()
 	fmt.Fprintf(w, "Here is the perimeter: %d", res)
 }
@@ -23,7 +23,7 @@ func main() {
 
     	http.HandleFunc("/", handler)
 	http.HandleFunc("/perimeter", func(w http.ResponseWriter, r *http.Request) {
-		perimeter(w, r, rect)
+		perimeter(w, rect)
 	})
 
     	http.ListenAndServe(":8081", nil)
